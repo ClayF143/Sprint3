@@ -13,8 +13,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.Observable;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *         and Centre
  */
 
-public class ServerImplementation implements Server
+public class ServerImplementation extends Observable implements Server
 {
 
 	private ConcurrentHashMap<String, Account> loginMap = new ConcurrentHashMap<String, Account>();
@@ -40,6 +42,7 @@ public class ServerImplementation implements Server
 	private ConcurrentHashMap<String, Department> departmentMap = new ConcurrentHashMap<String, Department>();
 	private ConcurrentHashMap<String, PlanFile> planTemplateMap = new ConcurrentHashMap<String, PlanFile>();
 
+	private ArrayList<Client> observers;
 	/**
 	 * Initializes server with default objects listed above for testing
 	 * 
@@ -96,7 +99,7 @@ public class ServerImplementation implements Server
 	 * java.lang.String)
 	 */
 
-	public String login(String username, String password)
+	public String login(String username, String password,Client client) throws RemoteException
 	{
 		if (!loginMap.containsKey(username))// checks username is valid
 		{
@@ -106,6 +109,7 @@ public class ServerImplementation implements Server
 		Account userAccount = loginMap.get(username);
 
 		String cookie = userAccount.testCredentials(password);
+		addObserver(client);
 		return cookie;
 	}
 
@@ -616,4 +620,24 @@ public class ServerImplementation implements Server
 		}
 
 	}
+
+	@Override
+	public void addObserver(Client observer) throws RemoteException {
+		observers.add(observer);
+	}
+	
+	@Override
+    public void update(Client client) {
+        try {
+            for(Client c:observers)
+            {
+            	if(!client.getCookie().equals(c.getCookie()))
+            	{
+            		c.update();
+            	}
+            }
+        } catch (RemoteException e) {
+            System.out.println("Remote exception removing observer:" + this);
+        }
+    }
 }

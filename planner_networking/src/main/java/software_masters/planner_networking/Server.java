@@ -24,7 +24,7 @@ public interface Server extends Remote
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	String login(String username, String password) throws IllegalArgumentException, RemoteException;
+	String login(String username, String password,Client client) throws IllegalArgumentException, RemoteException;
 
 	/**
 	 * Returns planFile object from the user's department given a year. Throws
@@ -158,5 +158,9 @@ public interface Server extends Remote
 	 * @throws RemoteException
 	 */
 	public Collection<PlanFile> getPlans(String cookie) throws RemoteException;
+	
+	void addObserver(Client observer) throws RemoteException;
+
+	void update(Client client);
 
 }

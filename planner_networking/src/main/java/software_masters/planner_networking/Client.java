@@ -44,7 +44,7 @@ public class Client
 	{
 		currPlanFile = null;
 		currNode = null;
-		cookie = server.login(username, password);
+		cookie = server.login(username, password,this);
 	}
 
 	/**
@@ -266,6 +266,11 @@ public class Client
 	public void setServer(Server server)
 	{
 		this.server = server;
+	}
+	
+	public void update() throws RemoteException
+	{
+		System.out.println("notify");
 	}
 
 }

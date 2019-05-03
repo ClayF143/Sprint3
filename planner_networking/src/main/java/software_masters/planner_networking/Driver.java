@@ -53,7 +53,8 @@ public class Driver extends Application implements ViewTransitionalModel
 
 		} catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println("If the server is local, there was an error"
+					+ "connecting to it.");
 
 		}
 

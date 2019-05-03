@@ -22,7 +22,6 @@ public class MainGUITest extends ApplicationTest
 	@BeforeClass
 	public static void setUpClass() throws Exception
 	{
-		//ServerImplementation.main(null);
 		ApplicationTest.launch(Driver.class);
 	}
 
