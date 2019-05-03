@@ -1,5 +1,10 @@
 package software_masters.planner_networking;
 
+import java.rmi.ConnectIOException;
+import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -81,9 +86,24 @@ public class LoginController
 
 			try
 			{
-				// TODO set server somehow //
+				if(!hostText.getText().equals("localhost"))
+				{
+					try
+					{
+						Registry registry = LocateRegistry.getRegistry
+								(Integer.valueOf(hostText.getText()));
+						Server stub = (Server) registry.lookup("PlannerServer");
+						setClient(new Client(stub));
+						vtmodel.setClient(client);
+					}
+					catch(ConnectIOException e)
+					{
+						System.out.println("Couldn't connect to non-local server");
+					}
+				}
 				client.login(user, pass);
 				// TODO reset scene and switch to ClientView
+				
 				vtmodel.showMainView();
 			} catch (IllegalArgumentException e)
 			{

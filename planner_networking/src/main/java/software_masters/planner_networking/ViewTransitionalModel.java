@@ -8,5 +8,7 @@ public interface ViewTransitionalModel
 	public void showMainView() throws IOException, Exception;
 
 	public void showLogin() throws IOException;
+	
+	public void setClient(Client client) throws IOException;
 
 }

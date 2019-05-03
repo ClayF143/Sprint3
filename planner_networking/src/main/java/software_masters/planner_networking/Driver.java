@@ -120,5 +120,11 @@ public class Driver extends Application implements ViewTransitionalModel
 		mainController.getPlans(mainController.yearDropdown);
 		stage.setScene(scene2);
 	}
+	
+	@Override
+	public void setClient(Client client) throws IOException {
+		this.client=client;
+		
+	}
 
 }
