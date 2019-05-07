@@ -44,7 +44,7 @@ public class ServerImplementation extends Observable implements Server
 	private ConcurrentHashMap<String, Department> departmentMap = new ConcurrentHashMap<String, Department>();
 	private ConcurrentHashMap<String, PlanFile> planTemplateMap = new ConcurrentHashMap<String, PlanFile>();
 
-	private ArrayList<Client> observers;
+	private ArrayList<WrappedObserver> observers;
 	/**
 	 * Initializes server with default objects listed above for testing
 	 * 
@@ -201,6 +201,7 @@ public class ServerImplementation extends Observable implements Server
 
 		}
 		dept.addPlan(plan.getYear(), plan);
+		update(cookie);
 
 	}
 
@@ -635,6 +636,11 @@ public class ServerImplementation extends Observable implements Server
         	this.client=client;
         }
         
+        public Client getClient()
+        {
+        	return (Client)client;
+        }
+        
         @Override
         public void update(Observable o, Object arg)
         {
@@ -654,5 +660,16 @@ public class ServerImplementation extends Observable implements Server
         addObserver(mo);
         System.out.println("Added observer:" + mo);
     }
+	
+	private void update(String cookie)
+	{
+		for(WrappedObserver o:observers)
+		{
+			if(!cookie.equals(o.getClient().getCookie()))
+			{
+				o.notify();
+			}
+		}
+	}
 	
 }
