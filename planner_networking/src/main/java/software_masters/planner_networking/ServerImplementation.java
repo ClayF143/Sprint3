@@ -7,6 +7,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -99,17 +101,18 @@ public class ServerImplementation extends Observable implements Server
 	 * java.lang.String)
 	 */
 
-	public String login(String username, String password,Client client) throws RemoteException
+	public String login(String username, String password) throws RemoteException
 	{
+		System.out.println("got to the login in the server");
 		if (!loginMap.containsKey(username))// checks username is valid
 		{
+			System.out.println("LoginError");
 			throw new IllegalArgumentException("Invalid username and/or password");
 
 		}
 		Account userAccount = loginMap.get(username);
 
 		String cookie = userAccount.testCredentials(password);
-		addObserver(client);
 		return cookie;
 	}
 
@@ -608,7 +611,6 @@ public class ServerImplementation extends Observable implements Server
 			e.printStackTrace();
 			return;
 		}
-
 		Server stub = (Server) UnicastRemoteObject.exportObject(server, 0);
 		try
 		{
@@ -618,26 +620,39 @@ public class ServerImplementation extends Observable implements Server
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-	}
-
-	@Override
-	public void addObserver(Client observer) throws RemoteException {
-		observers.add(observer);
+		int x=0;
+		System.out.println(x);
 	}
 	
-	@Override
-    public void update(Client client) {
-        try {
-            for(Client c:observers)
-            {
-            	if(!client.getCookie().equals(c.getCookie()))
-            	{
-            		c.update();
-            	}
-            }
-        } catch (RemoteException e) {
-            System.out.println("Remote exception removing observer:" + this);
+	private class WrappedObserver implements Observer, Serializable
+	{
+		private static final long serialVersionUID = 1L;
+
+        private RemoteObserver client = null;
+        
+        public WrappedObserver(RemoteObserver client)
+        {
+        	this.client=client;
         }
+        
+        @Override
+        public void update(Observable o, Object arg)
+        {
+        	try {
+				client.update(o,arg);
+			} catch (RemoteException e) {
+				System.out.println("server side update error");
+				e.printStackTrace();
+			}
+        }
+
+	}
+
+	@Override
+    public void addObserver(RemoteObserver client) throws RemoteException {
+        WrappedObserver mo = new WrappedObserver(client);
+        addObserver(mo);
+        System.out.println("Added observer:" + mo);
     }
+	
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -50,12 +51,14 @@ public class Driver extends Application implements ViewTransitionalModel
 			registry = LocateRegistry.getRegistry(1060);
 			Server stub = (Server) registry.lookup("PlannerServer");
 			client = new Client(stub);
+			ConcurrentHashMap<String, Account> loginMap=stub.getLoginMap();
+			int x=0;
 
 		} catch (Exception e)
 		{
 			System.out.println("If the server is local, there was an error"
 					+ "connecting to it.");
-
+			e.printStackTrace();
 		}
 
 		stage = primaryStage;

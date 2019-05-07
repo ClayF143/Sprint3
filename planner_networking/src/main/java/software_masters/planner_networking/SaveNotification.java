@@ -24,8 +24,6 @@ public class SaveNotification {
 	 */
 	public static void show()
 	{
-		btnYesClicked = false;
-
 		stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle("Notification");
@@ -43,7 +41,6 @@ public class SaveNotification {
 		Scene scene = new Scene(pane);
 		stage.setScene(scene);
 		stage.showAndWait();
-
 	}
 	
 	private static void okbtnClicked(Stage stage)

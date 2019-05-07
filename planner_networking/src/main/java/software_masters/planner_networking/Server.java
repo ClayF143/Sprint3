@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
+import java.util.Observable;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -24,7 +25,7 @@ public interface Server extends Remote
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	String login(String username, String password,Client client) throws IllegalArgumentException, RemoteException;
+	String login(String username, String password) throws IllegalArgumentException, RemoteException;
 
 	/**
 	 * Returns planFile object from the user's department given a year. Throws
@@ -159,8 +160,6 @@ public interface Server extends Remote
 	 */
 	public Collection<PlanFile> getPlans(String cookie) throws RemoteException;
 	
-	void addObserver(Client observer) throws RemoteException;
-
-	void update(Client client);
+	void addObserver(RemoteObserver o) throws RemoteException;
 
 }

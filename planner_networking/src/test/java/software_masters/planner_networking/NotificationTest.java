@@ -47,7 +47,9 @@ public class NotificationTest extends ApplicationTest {
 		write("user");
 		clickOn("#loginButton");
 		scene=stage.getScene();
+		System.out.println("logged in fine apparently");
 		changeSomething();
+		System.out.println("changed something");
 		scene=stage.getScene();
 		Button ok=(Button) scene.lookup("#ok");
 		assertTrue(ok.getText().equals("ok"));

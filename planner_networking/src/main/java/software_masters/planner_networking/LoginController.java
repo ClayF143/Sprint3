@@ -4,6 +4,7 @@ import java.rmi.ConnectIOException;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -108,6 +109,7 @@ public class LoginController
 			} catch (IllegalArgumentException e)
 			{
 				badLogin.setVisible(true);
+				e.printStackTrace();
 			}
 		}
 	}

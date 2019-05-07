@@ -1,14 +1,18 @@
 package software_masters.planner_networking;
 
+import java.lang.reflect.Proxy;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Observable;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author lee kendall and wesley murray
  */
 
-public class Client
+public class Client extends UnicastRemoteObject implements RemoteObserver
 {
 
 	/**
@@ -21,13 +25,15 @@ public class Client
 	private PlanFile currPlanFile;
 	private Node currNode;
 	private Server server;
+	
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Sets the client's server.
 	 * 
 	 * @param server
 	 */
-	public Client(Server server)
+	public Client(Server server) throws RemoteException
 	{
 		this.server = server;
 	}
@@ -44,7 +50,12 @@ public class Client
 	{
 		currPlanFile = null;
 		currNode = null;
-		cookie = server.login(username, password,this);
+		ConcurrentHashMap<String, Account> loginMap=server.getLoginMap();
+		int x=0;
+		System.out.println(username+password);
+		cookie = server.login(username, password);
+		Boolean isit=Proxy.isProxyClass(this.getClass());
+		server.addObserver(this);
 	}
 
 	/**
@@ -268,9 +279,10 @@ public class Client
 		this.server = server;
 	}
 	
-	public void update() throws RemoteException
+	@Override
+	public void update(Observable o, Object arg) throws RemoteException
 	{
-		System.out.println("notify");
+		SaveNotification.show();
 	}
 
 }
