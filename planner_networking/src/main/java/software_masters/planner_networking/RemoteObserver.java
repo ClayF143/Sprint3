@@ -6,4 +6,5 @@ import java.util.Observable;
 
 public interface RemoteObserver extends Remote {
 	void update(Observable o, Object arg) throws RemoteException;
+	String getCookie() throws RemoteException;
 }

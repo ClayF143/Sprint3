@@ -38,7 +38,7 @@ public class NotificationTest extends ApplicationTest {
 	}
 	
 	@Test
-	public void notificationTest() throws IllegalArgumentException, RemoteException, NotBoundException
+	public void notificationTest() throws IllegalArgumentException, RemoteException, NotBoundException, InterruptedException
 	{
 		scene = stage.getScene();
 		clickOn("#userText");
@@ -61,9 +61,11 @@ public class NotificationTest extends ApplicationTest {
 		Server stub = (Server) registry.lookup("PlannerServer");
 		Client client=new Client(stub);
 		client.login("admin", "admin");
-		client.getPlan("2019");
-		client.setCurrNode(client.getCurrNode().getChildren().get(0));
+		client.getPlan1("2019");
+		client.setCurrNode(client.getCurrNode1().getChildren().get(0));
 		client.addBranch();
+		client.pushPlan(client.getCurrPlanFile());
+		
 	}
 
 }

@@ -188,11 +188,11 @@ public class LocalClientTest
 	{
 		// plan does not exist throws exception
 		testClient.login("user", "user");
-		assertThrows(IllegalArgumentException.class, () -> testClient.getPlan("2000"));
+		assertThrows(IllegalArgumentException.class, () -> testClient.getPlan1("2000"));
 
 		// verify obtained plan is as expected
 		ConcurrentHashMap<String, Department> departmentMap = actualServer.getDepartmentMap();
-		testClient.getPlan("2019");
+		testClient.getPlan1("2019");
 		assertEquals(departmentMap.get("default").getPlan("2019"), testClient.getCurrPlanFile());
 	}
 
@@ -236,7 +236,7 @@ public class LocalClientTest
 
 		// edit existing default planfile
 		testClient.login("user", "user");
-		testClient.getPlan("2019");
+		testClient.getPlan1("2019");
 		PlanFile test = testClient.getCurrPlanFile();
 		Plan temp = test.getPlan(); // if issues later verify shallow not deep copy
 		temp.setName("Centre_Plan_2");
@@ -251,7 +251,7 @@ public class LocalClientTest
 		// verifies test file now on server is the same as the object that was pushed
 		testClient.login("user", "user");
 		testClient.pushPlan(test);
-		testClient.getPlan("2019");
+		testClient.getPlan1("2019");
 		assertEquals(test, testClient.getCurrPlanFile());
 
 	}
@@ -270,7 +270,7 @@ public class LocalClientTest
 		testClient.login("user", "user");
 		//////////////////////////////////// Centre
 		//////////////////////////////////// example/////////////////////////////////////////////
-		testClient.getPlan("2019");
+		testClient.getPlan1("2019");
 		PlanFile test = testClient.getCurrPlanFile();
 		Node root = test.getPlan().getRoot();
 		// try adding second mission should throw exception
@@ -289,7 +289,7 @@ public class LocalClientTest
 		testClient.setCurrNode(root.getChildren().get(0));
 		assertThrows(IllegalArgumentException.class, () -> testClient.addBranch());
 		// try adding second objective
-		testClient.setCurrNode(testClient.getCurrNode().getChildren().get(0));// at objective level
+		testClient.setCurrNode(testClient.getCurrNode1().getChildren().get(0));// at objective level
 		testBranchCopy();
 		/////////////////////////////////// Iowa state
 		/////////////////////////////////// example///////////////////////////////////////////////
@@ -301,7 +301,7 @@ public class LocalClientTest
 		testClient.setCurrNode(root.getChildren().get(0));
 		assertThrows(IllegalArgumentException.class, () -> testClient.addBranch());
 		// try adding second core value
-		testClient.setCurrNode(testClient.getCurrNode().getChildren().get(0));// at core value level
+		testClient.setCurrNode(testClient.getCurrNode1().getChildren().get(0));// at core value level
 		testBranchCopy();
 	}
 
@@ -315,11 +315,11 @@ public class LocalClientTest
 	private void testBranchCopy() throws IllegalArgumentException, RemoteException
 	{
 		testClient.addBranch();
-		assertEquals(testClient.getCurrNode(), testClient.getCurrNode().getParent().getChildren().get(1));
+		assertEquals(testClient.getCurrNode1(), testClient.getCurrNode1().getParent().getChildren().get(1));
 		// assures deep copy not shallow. this is tested by changing one copy and
 		// verifying that the original was not changed.
-		testClient.getCurrNode().getParent().getChildren().get(1).setData("some text");
-		assertNotEquals(testClient.getCurrNode(), testClient.getCurrNode().getParent().getChildren().get(1));
+		testClient.getCurrNode1().getParent().getChildren().get(1).setData("some text");
+		assertNotEquals(testClient.getCurrNode1(), testClient.getCurrNode1().getParent().getChildren().get(1));
 	}
 
 	/**
@@ -335,7 +335,7 @@ public class LocalClientTest
 		testClient.login("user", "user");
 		//////////////////////////////////// Centre
 		//////////////////////////////////// example/////////////////////////////////////////////
-		testClient.getPlan("2019");
+		testClient.getPlan1("2019");
 		PlanFile test = testClient.getCurrPlanFile();
 		Node root = test.getPlan().getRoot();
 		// try removing mission should throw exception
@@ -348,7 +348,7 @@ public class LocalClientTest
 		testClient.setCurrNode(root.getChildren().get(0));// at goal level
 		testBranchCopy();
 		testClient.removeBranch();
-		assertEquals("some text", testClient.getCurrNode().getParent().getChildren().get(0).getData());
+		assertEquals("some text", testClient.getCurrNode1().getParent().getChildren().get(0).getData());
 	}
 
 	/**
@@ -370,13 +370,13 @@ public class LocalClientTest
 		testClient.setCurrNode(root.getChildren().get(0));
 		assertThrows(IllegalArgumentException.class, () -> testClient.removeBranch());
 		// try removing objective should throw exception bc only one exists
-		testClient.setCurrNode(testClient.getCurrNode().getChildren().get(0));// objective level
+		testClient.setCurrNode(testClient.getCurrNode1().getChildren().get(0));// objective level
 		assertThrows(IllegalArgumentException.class, () -> testClient.removeBranch());
 		// add second objective
-		testClient.setCurrNode(testClient.getCurrNode());// at objective level
+		testClient.setCurrNode(testClient.getCurrNode1());// at objective level
 		testBranchCopy();
 		testClient.removeBranch();
-		assertEquals("some text", testClient.getCurrNode().getParent().getChildren().get(0).getData());
+		assertEquals("some text", testClient.getCurrNode1().getParent().getChildren().get(0).getData());
 	}
 
 	/**
@@ -398,13 +398,13 @@ public class LocalClientTest
 		testClient.setCurrNode(root.getChildren().get(0));
 		assertThrows(IllegalArgumentException.class, () -> testClient.removeBranch());
 		// try removing core value should throw exception bc only one exists
-		testClient.setCurrNode(testClient.getCurrNode().getChildren().get(0));// objective level
+		testClient.setCurrNode(testClient.getCurrNode1().getChildren().get(0));// objective level
 		assertThrows(IllegalArgumentException.class, () -> testClient.removeBranch());
 		// add second core value
-		testClient.setCurrNode(testClient.getCurrNode().getChildren().get(0));// at core value level
+		testClient.setCurrNode(testClient.getCurrNode1().getChildren().get(0));// at core value level
 		testBranchCopy();
 		testClient.removeBranch();
-		assertEquals("some text", testClient.getCurrNode().getParent().getChildren().get(0).getData());
+		assertEquals("some text", testClient.getCurrNode1().getParent().getChildren().get(0).getData());
 	}
 
 }

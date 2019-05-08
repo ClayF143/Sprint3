@@ -10,5 +10,7 @@ public interface ViewTransitionalModel
 	public void showLogin() throws IOException;
 	
 	public void setClient(Client client) throws IOException;
+	
+	public void showComparison() throws Exception;
 
 }

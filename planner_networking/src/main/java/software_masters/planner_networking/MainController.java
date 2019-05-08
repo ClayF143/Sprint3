@@ -99,7 +99,7 @@ public class MainController
 	@FXML
 	void edit(MouseEvent event) throws IllegalArgumentException, RemoteException
 	{
-		client.getPlan(yearDropdown.getValue().getYear());
+		client.getPlan1(yearDropdown.getValue().getYear());
 		Boolean bool = client.getCurrPlanFile().isCanEdit();
 
 		if ((editButton.getText() == "Edit") && bool)
@@ -136,6 +136,12 @@ public class MainController
 		}
 		vtmodel.showLogin();
 	}
+	
+	@FXML
+	void compare(MouseEvent event) throws Exception
+	{
+		vtmodel.showComparison();
+	}
 
 	@FXML
 	void newPlan(MouseEvent event) throws Exception
@@ -147,7 +153,7 @@ public class MainController
 			yearSelectButton.setDisable(false);
 			yearDropdown.setDisable(false);
 			editButton.setDisable(false);
-			client.getPlan(newYearTxtField.getText());
+			client.getPlan1(newYearTxtField.getText());
 			yearDropdown.getItems().add(client.getCurrPlanFile());
 			newYearTxtField.setText("");
 			newYearTxtField.setEditable(false);
@@ -187,7 +193,7 @@ public class MainController
 		if (currNode.getParent().getChildren().size() > 1)
 		{
 			client.setCurrNode(currNode.getValue());
-			client.getCurrNode().getParent().removeChild(client.getCurrNode());
+			client.getCurrNode1().getParent().removeChild(client.getCurrNode1());
 			currNode.getParent().getChildren().remove(currNode);
 		}
 	}
@@ -248,8 +254,8 @@ public class MainController
 	public TreeView<Node> makeTree(String year) throws IllegalArgumentException, RemoteException
 	{
 
-		client.getPlan(year);
-		Node nodeRoot = client.getCurrNode();
+		client.getPlan1(year);
+		Node nodeRoot = client.getCurrNode1();
 		TreeItem<Node> treeRoot = new TreeItem<Node>(nodeRoot);
 		treeRoot.setExpanded(true);
 		recursiveSearch(treeRoot);
@@ -286,7 +292,7 @@ public class MainController
 	 */
 	public void addBranch(TreeItem<Node> currNode, String year) throws Exception
 	{
-		client.getPlan(year);
+		client.getPlan1(year);
 		client.setCurrNode(currNode.getValue().getChildren().get(0));
 		client.addBranch();
 		TreeItem<Node> tree2 = new TreeItem<Node>(
@@ -306,6 +312,7 @@ public class MainController
 	{
 		Centre plan = new Centre(node);
 		PlanFile planF = new PlanFile(s, true, plan);
+		System.out.println("client.pushPlan()");
 		client.pushPlan(planF);
 	}
 
@@ -319,8 +326,8 @@ public class MainController
 	 */
 	public TreeView<Node> makeDeepCopy(String year) throws IllegalArgumentException, RemoteException
 	{
-		client.getPlan(year);
-		Node master = client.getCurrNode();
+		client.getPlan1(year);
+		Node master = client.getCurrNode1();
 		Node copy = new Node(null, master.getName(), master.getData(), null);
 		deepCopier(master, copy);
 		TreeItem<Node> treeRoot = new TreeItem<Node>(copy);

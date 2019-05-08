@@ -43,8 +43,6 @@ public class ServerImplementation extends Observable implements Server
 	private ConcurrentHashMap<String, Account> cookieMap = new ConcurrentHashMap<String, Account>();
 	private ConcurrentHashMap<String, Department> departmentMap = new ConcurrentHashMap<String, Department>();
 	private ConcurrentHashMap<String, PlanFile> planTemplateMap = new ConcurrentHashMap<String, PlanFile>();
-
-	private ArrayList<WrappedObserver> observers;
 	/**
 	 * Initializes server with default objects listed above for testing
 	 * 
@@ -103,7 +101,6 @@ public class ServerImplementation extends Observable implements Server
 
 	public String login(String username, String password) throws RemoteException
 	{
-		System.out.println("got to the login in the server");
 		if (!loginMap.containsKey(username))// checks username is valid
 		{
 			System.out.println("LoginError");
@@ -179,7 +176,7 @@ public class ServerImplementation extends Observable implements Server
 	 * planner_networking.PlanFile, java.lang.String)
 	 */
 
-	public void savePlan(PlanFile plan, String cookie)
+	public void savePlan(PlanFile plan, String cookie) throws RemoteException
 	{
 		cookieChecker(cookie);// checks that cookie is valid
 
@@ -201,7 +198,9 @@ public class ServerImplementation extends Observable implements Server
 
 		}
 		dept.addPlan(plan.getYear(), plan);
-		update(cookie);
+		System.out.println("this.notifyObservers");
+		setChanged();
+		this.notifyObservers();
 
 	}
 
@@ -459,6 +458,11 @@ public class ServerImplementation extends Observable implements Server
 	{
 		return departmentMap.toString();
 	}
+	
+	public String toString()
+	{
+		return "1";
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -495,11 +499,6 @@ public class ServerImplementation extends Observable implements Server
 		this.planTemplateMap = planTemplateMap;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -621,8 +620,6 @@ public class ServerImplementation extends Observable implements Server
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		int x=0;
-		System.out.println(x);
 	}
 	
 	private class WrappedObserver implements Observer, Serializable
@@ -636,20 +633,24 @@ public class ServerImplementation extends Observable implements Server
         	this.client=client;
         }
         
-        public Client getClient()
+        public String getCookie() throws RemoteException
         {
-        	return (Client)client;
+        	return client.getCookie();
         }
         
         @Override
         public void update(Observable o, Object arg)
         {
-        	try {
-				client.update(o,arg);
-			} catch (RemoteException e) {
-				System.out.println("server side update error");
-				e.printStackTrace();
-			}
+        	
+//        	try {
+//        		System.out.println("updatestuff");
+//				//client.update(o,arg);
+//				System.out.println("updatestuff3");
+//			} catch (RemoteException e) {
+//				System.out.println("server side update error");
+//				e.printStackTrace();
+//			}
+        	System.out.println("updatestuff2");
         }
 
 	}
@@ -658,18 +659,6 @@ public class ServerImplementation extends Observable implements Server
     public void addObserver(RemoteObserver client) throws RemoteException {
         WrappedObserver mo = new WrappedObserver(client);
         addObserver(mo);
-        System.out.println("Added observer:" + mo);
     }
-	
-	private void update(String cookie)
-	{
-		for(WrappedObserver o:observers)
-		{
-			if(!cookie.equals(o.getClient().getCookie()))
-			{
-				o.notify();
-			}
-		}
-	}
 	
 }

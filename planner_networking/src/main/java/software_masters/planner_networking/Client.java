@@ -23,7 +23,9 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	 */
 	private String cookie;
 	private PlanFile currPlanFile;
+	private PlanFile currPlanFile2;
 	private Node currNode;
+	private Node currNode2;
 	private Server server;
 	
 	private static final long serialVersionUID = 1L;
@@ -50,11 +52,8 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	{
 		currPlanFile = null;
 		currNode = null;
-		ConcurrentHashMap<String, Account> loginMap=server.getLoginMap();
-		int x=0;
 		System.out.println(username+password);
 		cookie = server.login(username, password);
-		Boolean isit=Proxy.isProxyClass(this.getClass());
 		server.addObserver(this);
 	}
 
@@ -66,10 +65,16 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	public void getPlan(String year) throws IllegalArgumentException, RemoteException
+	public void getPlan1(String year) throws IllegalArgumentException, RemoteException
 	{
 		currPlanFile = server.getPlan(year, cookie);
 		currNode = currPlanFile.getPlan().getRoot();
+	}
+	
+	public void getPlan2(String year) throws IllegalArgumentException, RemoteException
+	{
+		currPlanFile2 = server.getPlan(year, cookie);
+		currNode2 = currPlanFile2.getPlan().getRoot();
 	}
 
 	/**
@@ -218,6 +223,7 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	/**
 	 * @return the cookie
 	 */
+	@Override
 	public String getCookie()
 	{
 		return cookie;
@@ -238,6 +244,11 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	{
 		return currPlanFile;
 	}
+	
+	public PlanFile getCurrPlanFile2()
+	{
+		return currPlanFile2;
+	}
 
 	/**
 	 * @param currPlanFile the currPlanFile to set
@@ -250,9 +261,14 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	/**
 	 * @return the currNode
 	 */
-	public Node getCurrNode()
+	public Node getCurrNode1()
 	{
 		return currNode;
+	}
+	
+	public Node getCurrNode2()
+	{
+		return currNode2;
 	}
 
 	/**
@@ -261,6 +277,11 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	public void setCurrNode(Node currNode)
 	{
 		this.currNode = currNode;
+	}
+	
+	public void setCurrNode2(Node currNode)
+	{
+		this.currNode2=currNode;
 	}
 
 	/**
@@ -282,6 +303,7 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	@Override
 	public void update(Observable o, Object arg) throws RemoteException
 	{
+		System.out.println(o.toString());
 		SaveNotification.show();
 	}
 
