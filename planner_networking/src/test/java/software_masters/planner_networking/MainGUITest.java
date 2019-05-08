@@ -264,4 +264,93 @@ public class MainGUITest extends ApplicationTest
 		assertTrue(field.getText().equals("Passing sprint 2"));
 
 	}
+	
+	@Test
+	public void testCompare()
+	{
+		scene=stage.getScene();
+		clickOn("#compare");
+		try
+		{
+			clickOn("#tree2");
+			assertTrue(false);
+		}
+		catch(Exception e)
+		{
+			assertTrue(true);
+		}
+		selectYear(2);
+		clickOn("#compare");
+		scene=stage.getScene();
+		Button add1=(Button)scene.lookup("#add1");
+		Button add2=(Button)scene.lookup("#add2");
+		Button edit1=(Button)scene.lookup("#edit1");
+		Button edit2=(Button)scene.lookup("#edit2");
+		assertTrue(add1.isDisable());
+		assertTrue(add2.isDisable());
+		
+		assertTrue(!edit1.isDisable());
+		assertTrue(edit2.isDisable());
+		clickOn("#edit1");
+		clickOn("#yearDropdown");
+		typeDown(2);
+		type(KeyCode.ENTER);
+		clickOn("#yearSelect");
+		clickOn("#tree1");
+		typeDown(1);
+		clickOn("#tree2");
+		typeDown(1);
+		TextField content1=(TextField)scene.lookup("#content1");
+		TextField content2=(TextField)scene.lookup("#content2");
+		assertTrue(content1.getText().equals(content2.getText()));
+		clickOn("#refresh");
+		TreeView<Node> one=(TreeView<Node>)scene.lookup("#tree1");
+		TreeView<Node> two=(TreeView<Node>)scene.lookup("#tree2");
+		assertTrue(one.getRoot().getValue().equals(two.getRoot().getValue()));
+		clickOn("#tree1");
+		clickOn("#add1");
+		clickOn("#refresh");
+		one=(TreeView<Node>)scene.lookup("#tree1");
+		two=(TreeView<Node>)scene.lookup("#tree2");
+		assertTrue(!one.getRoot().getValue().equals(two.getRoot().getValue()));
+		clickOn("#yearDropdown");
+		typeDown(2);
+		type(KeyCode.ENTER);
+		clickOn("#yearSelect");
+		clickOn("#tree1");
+		type(KeyCode.RIGHT);
+		typeDown(20);
+		clickOn("#tree2");
+		type(KeyCode.RIGHT);
+		typeDown(20);
+		content1=(TextField)scene.lookup("#content1");
+		content2=(TextField)scene.lookup("#content2");
+		assertTrue(!content1.getText().equals(content2.getText()));
+		clickOn("#refresh");
+		one=(TreeView<Node>)scene.lookup("#tree1");
+		two=(TreeView<Node>)scene.lookup("#tree2");
+		assertTrue(!one.getRoot().getValue().equals(two.getRoot().getValue()));
+		clickOn("#exit");
+	}
+	
+	@Test
+	public void testComments()
+	{
+		selectYear(2);
+		clickOn("#tree");
+		typeDown(2);
+		TextField tf=(TextField)scene.lookup("#contentField");
+		assertTrue(tf.getText().equals("Learn how to use eclipse"));
+		clickOn("#addComment");
+		write("one");
+		clickOn("#addCommentButton");
+		clickOn("#editButton");
+		clickOn("#saveButton");
+		selectYear(-2);
+		selectYear(2);
+		clickOn("#tree");
+		typeDown(2);
+		TextArea ta=(TextArea)scene.lookup("#commentField");
+		assertTrue(ta.getText().equals("user: one   ID:0"));
+	}
 }

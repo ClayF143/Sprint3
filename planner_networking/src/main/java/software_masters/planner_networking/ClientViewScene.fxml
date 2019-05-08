@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -27,7 +28,7 @@
             <Button fx:id="editButton" disable="true" mnemonicParsing="false" onMouseClicked="#edit" text="Edit" />
             <Button fx:id="saveButton" disable="true" mnemonicParsing="false" onMouseClicked="#save" text="Save" />
             <Button fx:id="copyButton" disable="true" mnemonicParsing="false" onMouseClicked="#copy" text="Use as Template" />
-            <Button fx:id="compare" mnemonicParsing="false" onMouseClicked="#compare" text="Compare" />
+            <Button fx:id="compare" disable="true" mnemonicParsing="false" onMouseClicked="#compare" text="Compare" />
             <Button fx:id="logout" mnemonicParsing="false" onMouseClicked="#logout" text="Logout" />
          </children>
       </VBox>
@@ -37,10 +38,19 @@
          <center>
             <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                  <Region prefHeight="200.0" prefWidth="200.0" />
                   <Label text="Fill in the Content Below" />
-                  <TextField fx:id="contentField" minHeight="-Infinity" prefHeight="90.0" prefWidth="300.0" />
-                  <Region prefHeight="200.0" prefWidth="200.0" />
+                  <TextField fx:id="contentField" minHeight="-Infinity" prefHeight="147.0" prefWidth="550.0" />
+                  <Region prefHeight="41.0" prefWidth="550.0" />
+                  <TextArea fx:id="commentField" editable="false" prefHeight="200.0" prefWidth="200.0" />
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="addComment" />
+                        <Button fx:id="addCommentButton" mnemonicParsing="false" onMouseClicked="#addComment" text="Add" />
+                        <Region prefHeight="90.0" prefWidth="63.0" />
+                        <TextField fx:id="deleteComment" text="Comment ID" />
+                        <Button fx:id="deleteCommentButton" mnemonicParsing="false" onMouseClicked="#deleteComment" text="Delete" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </center>

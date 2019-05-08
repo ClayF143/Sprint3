@@ -1,10 +1,8 @@
 package software_masters.planner_networking;
 
 import java.rmi.ConnectIOException;
-import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

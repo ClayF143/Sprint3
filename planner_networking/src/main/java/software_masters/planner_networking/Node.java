@@ -16,6 +16,7 @@ public class Node implements Serializable
 	private String name;
 	private String data;
 	private ArrayList<Node> children = new ArrayList<Node>();
+	private ArrayList<Comment> comments;
 
 	// constructor is data is not known
 	/**
@@ -32,7 +33,38 @@ public class Node implements Serializable
 		this.name = name;
 		this.parent = parent;
 		this.data = data;
-
+		comments=new ArrayList<Comment>();
+	}
+	
+	public void addComment(String username,String content)
+	{
+		int id=0;
+		if(comments.isEmpty())
+		{
+			id=0;
+		}
+		else
+		{
+			String s=Integer.valueOf(comments.get(comments.size()-1).getID()).toString();
+			id=Integer.valueOf(s)+1;
+		}
+		comments.add(new Comment(username,content,id));
+	}
+	
+	public void removeComment(String id)
+	{
+		for(Comment c:comments)
+		{
+			if(Integer.valueOf(c.getID()).toString().equals(id))
+			{
+				comments.remove(c);
+			}
+		}
+	}
+	
+	public ArrayList<Comment> getComments()
+	{
+		return comments;
 	}
 
 	// empty constructor for XML

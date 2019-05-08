@@ -75,6 +75,12 @@ public class ComparisonController
 	}
 	
 	@FXML
+	void exit(MouseEvent event) throws IOException, Exception
+	{
+		vtmodel.showMainView();
+	}
+	
+	@FXML
 	void addBranch2(MouseEvent event) throws Exception
 	{
 		addBranch(currNode2, yearDropdown.getValue().getYear());

@@ -1,12 +1,10 @@
 package software_masters.planner_networking;
 
-import java.lang.reflect.Proxy;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Observable;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author lee kendall and wesley murray
@@ -27,6 +25,7 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	private Node currNode;
 	private Node currNode2;
 	private Server server;
+	private String username;
 	
 	private static final long serialVersionUID = 1L;
 
@@ -38,6 +37,11 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	public Client(Server server) throws RemoteException
 	{
 		this.server = server;
+	}
+	
+	public String getUsername()
+	{
+		return username;
 	}
 
 	/**
@@ -54,6 +58,7 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 		currNode = null;
 		System.out.println(username+password);
 		cookie = server.login(username, password);
+		this.username=username;
 		server.addObserver(this);
 	}
 

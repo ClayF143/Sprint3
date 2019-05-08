@@ -5,11 +5,7 @@ import java.rmi.RemoteException;
 
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 public class MainController
@@ -38,18 +34,36 @@ public class MainController
 
 	@FXML
 	private Button logout;
+	
+	@FXML
+	private Button addCommentButton;
+	
+	@FXML
+	private Button deleteCommentButton;
+	
+	@FXML
+	private TextField addComment;
+	
+	@FXML
+	private TextField deleteComment;
 
 	@FXML
 	private TextField contentField;
 
 	@FXML
 	private TextField newYearTxtField;
+	
+	@FXML
+	private Button compare;
 
 	@FXML
 	private Button enterNewYearButton;
 
 	@FXML
 	private TreeView<Node> tree;
+	
+	@FXML
+	private TextArea commentField;
 
 	private Client client;
 
@@ -70,6 +84,29 @@ public class MainController
 		this.client = client;
 	}
 
+	@FXML
+	void addComment(MouseEvent event)
+	{
+		currNode.getValue().addComment(client.getUsername(),addComment.getText());
+		updateComments();
+	}
+	
+	private void updateComments()
+	{
+		String newContent="";
+		for(Comment c:currNode.getValue().getComments())
+		{
+			newContent+=c.getUsername()+": "+c.getContent()+"     ID:"+c.getID()+"\n\n\n";
+		}
+		commentField.setText(newContent);
+	}
+	
+	@FXML
+	void deleteComment(MouseEvent event)
+	{
+		currNode.getValue().removeComment(deleteComment.getText());
+		updateComments();
+	}
 	@FXML
 	void addBranch(MouseEvent event) throws Exception
 	{
@@ -184,7 +221,7 @@ public class MainController
 				.addListener((v, oldValue, newValue) -> tree_SelectionChanged(newValue));
 		editButton.setText("View");
 		edit(event);
-
+		compare.setDisable(false);
 	}
 
 	@FXML
@@ -229,6 +266,7 @@ public class MainController
 		}
 		listener = (observable, oldvalue, newvalue) -> setText(newvalue);
 		contentField.textProperty().addListener(listener);
+		updateComments();
 
 	}
 
