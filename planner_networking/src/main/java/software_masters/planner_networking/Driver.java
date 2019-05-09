@@ -71,7 +71,6 @@ public class Driver extends Application implements ViewTransitionalModel
 					closing();
 				} catch (RemoteException e1)
 				{
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			});

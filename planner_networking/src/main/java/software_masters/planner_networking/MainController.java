@@ -2,6 +2,7 @@ package software_masters.planner_networking;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.*;
 
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -96,7 +97,10 @@ public class MainController
 		String newContent="";
 		for(Comment c:currNode.getValue().getComments())
 		{
-			newContent+=c.getUsername()+": "+c.getContent()+"     ID:"+c.getID()+"\n\n\n";
+			if(c.getID()!=-1)
+			{
+				newContent+=c.getUsername()+": "+c.getContent()+"     ID:"+c.getID()+"\n\n\n";
+			}
 		}
 		commentField.setText(newContent);
 	}
@@ -104,7 +108,7 @@ public class MainController
 	@FXML
 	void deleteComment(MouseEvent event)
 	{
-		currNode.getValue().removeComment(deleteComment.getText());
+		currNode.getValue().removeComment(Integer.valueOf(deleteComment.getText()));
 		updateComments();
 	}
 	@FXML
@@ -205,7 +209,7 @@ public class MainController
 			saveButton.setDisable(true);
 		} else
 		{
-			System.out.println("Please enter a valid year please");
+			System.out.println("Please enter a valid year");
 		}
 
 	}
@@ -350,7 +354,6 @@ public class MainController
 	{
 		Centre plan = new Centre(node);
 		PlanFile planF = new PlanFile(s, true, plan);
-		System.out.println("client.pushPlan()");
 		client.pushPlan(planF);
 	}
 

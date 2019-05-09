@@ -34,6 +34,7 @@ public class Node implements Serializable
 		this.parent = parent;
 		this.data = data;
 		comments=new ArrayList<Comment>();
+		comments.add(new Comment("dummy","dummy",-1));
 	}
 	
 	public void addComment(String username,String content)
@@ -51,13 +52,14 @@ public class Node implements Serializable
 		comments.add(new Comment(username,content,id));
 	}
 	
-	public void removeComment(String id)
+	public void removeComment(int id)
 	{
 		for(Comment c:comments)
 		{
-			if(Integer.valueOf(c.getID()).toString().equals(id))
+			if(c.getID()==id)
 			{
 				comments.remove(c);
+				return;
 			}
 		}
 	}

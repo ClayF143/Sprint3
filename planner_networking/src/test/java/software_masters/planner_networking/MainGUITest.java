@@ -233,7 +233,6 @@ public class MainGUITest extends ApplicationTest
 		clickOn("#tree");
 		typeDown(20);
 		field = (TextField) scene.lookup("#contentField");
-		System.out.println(field.getText());
 		assertTrue(field.getText().equals("Result 2018"));
 	}
 
@@ -333,14 +332,31 @@ public class MainGUITest extends ApplicationTest
 		clickOn("#exit");
 	}
 	
+	private void addcomment(String s)
+	{
+		clickOn("#addComment");
+		clickOn("#addComment");
+		clickOn("#addComment");
+		write(s);
+		clickOn("#addCommentButton");
+	}
+	
+	private void deletecomment(int id)
+	{
+		clickOn("#deleteComment");
+		clickOn("#deleteComment");
+		clickOn("#deleteComment");
+		write(id+"");
+		clickOn("#deleteCommentButton");
+	}
+	
 	@Test
 	public void testComments()
 	{
+		scene=stage.getScene();
 		selectYear(2);
 		clickOn("#tree");
 		typeDown(2);
-		TextField tf=(TextField)scene.lookup("#contentField");
-		assertTrue(tf.getText().equals("Learn how to use eclipse"));
 		clickOn("#addComment");
 		write("one");
 		clickOn("#addCommentButton");
@@ -351,6 +367,22 @@ public class MainGUITest extends ApplicationTest
 		clickOn("#tree");
 		typeDown(2);
 		TextArea ta=(TextArea)scene.lookup("#commentField");
-		assertTrue(ta.getText().equals("user: one   ID:0"));
+		assertTrue(ta.getText().equals("user: one     ID:0\n\n\n"));
+		
+		//removetesting
+		selectYear(4);
+		clickOn("#tree");
+		typeDown(5);
+		addcomment("one");
+		addcomment("two");
+		addcomment("three");
+		addcomment("four");
+		deletecomment(1);
+		deletecomment(2);
+		deletecomment(3);
+		deletecomment(0);
+		ta=(TextArea)scene.lookup("#commentField");
+		assertTrue(ta.getText().equals(""));
+		
 	}
 }
