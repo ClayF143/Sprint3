@@ -101,7 +101,7 @@ public class LoginController
 					}
 				}
 				client.login(user, pass);
-				// TODO reset scene and switch to ClientView
+				System.out.println("Yo");
 				
 				vtmodel.showMainView();
 			} catch (IllegalArgumentException e)

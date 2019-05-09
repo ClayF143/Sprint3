@@ -1,16 +1,18 @@
 package software_masters.planner_networking;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Observable;
+import java.util.Observer;
 
 /**
  * @author lee kendall and wesley murray
  */
 
-public class Client extends UnicastRemoteObject implements RemoteObserver
+public class Client extends UnicastRemoteObject
 {
 
 	/**
@@ -43,6 +45,7 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	{
 		return username;
 	}
+	
 
 	/**
 	 * Logs in, returns cookie
@@ -56,10 +59,9 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	{
 		currPlanFile = null;
 		currNode = null;
-		System.out.println(username+password);
 		cookie = server.login(username, password);
+		System.out.println("logged in");
 		this.username=username;
-		server.addObserver(this);
 	}
 
 	/**
@@ -228,7 +230,6 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	/**
 	 * @return the cookie
 	 */
-	@Override
 	public String getCookie()
 	{
 		return cookie;
@@ -304,12 +305,11 @@ public class Client extends UnicastRemoteObject implements RemoteObserver
 	{
 		this.server = server;
 	}
-	
-	@Override
-	public void update(Observable o, Object arg) throws RemoteException
+
+	public void update(String a)
 	{
-		System.out.println(o.toString());
 		SaveNotification.show();
+		
 	}
 
 }

@@ -8,10 +8,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Observable;
@@ -195,9 +197,10 @@ public class ServerImplementation extends Observable implements Server
 
 		}
 		dept.addPlan(plan.getYear(), plan);
+		System.out.println("saved plan");
 		System.out.println("this.notifyObservers");
 		setChanged();
-		this.notifyObservers();
+		notifyObservers(cookie);
 
 	}
 
@@ -618,43 +621,16 @@ public class ServerImplementation extends Observable implements Server
 		}
 	}
 	
-	private class WrappedObserver implements Observer, Serializable
+	public void addObserver(final Remote r)
 	{
-		private static final long serialVersionUID = 1L;
-
-        private RemoteObserver client = null;
-        
-        public WrappedObserver(RemoteObserver client)
+		super.addObserver(new Observer()
         {
-        	this.client=client;
-        }
-        
-        public String getCookie() throws RemoteException
-        {
-        	return client.getCookie();
-        }
-        
-        @Override
-        public void update(Observable o, Object arg)
-        {
-        	
-//        	try {
-//        		System.out.println("updatestuff");
-//				//client.update(o,arg);
-//				System.out.println("updatestuff3");
-//			} catch (RemoteException e) {
-//				System.out.println("server side update error");
-//				e.printStackTrace();
-//			}
-        	System.out.println("updatestuff2");
-        }
-
+            @Override
+            public void update(Observable o,Object arg)
+            {
+                ((Client) r).update("yo");
+            }
+        });
 	}
 
-	@Override
-    public void addObserver(RemoteObserver client) throws RemoteException {
-        WrappedObserver mo = new WrappedObserver(client);
-        addObserver(mo);
-    }
-	
 }

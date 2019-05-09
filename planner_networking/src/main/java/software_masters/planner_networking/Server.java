@@ -5,6 +5,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -159,7 +160,7 @@ public interface Server extends Remote
 	 * @throws RemoteException
 	 */
 	public Collection<PlanFile> getPlans(String cookie) throws RemoteException;
-	
-	void addObserver(RemoteObserver o) throws RemoteException;
+
+	void addObserver(Remote aRemoteObj) throws RemoteException;
 
 }

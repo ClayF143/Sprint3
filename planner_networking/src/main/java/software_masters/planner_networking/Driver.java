@@ -1,9 +1,11 @@
 package software_masters.planner_networking;
 
 import java.io.IOException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -51,6 +53,11 @@ public class Driver extends Application implements ViewTransitionalModel
 			registry = LocateRegistry.getRegistry(1060);
 			Server stub = (Server) registry.lookup("PlannerServer");
 			client = new Client(stub);
+			//Remote aRemoteObj = (Remote) client;
+            //stub.addObserver(aRemoteObj);
+			stub.addObserver(client);
+            System.out.println("added Observer");
+            
 
 		} catch (Exception e)
 		{
