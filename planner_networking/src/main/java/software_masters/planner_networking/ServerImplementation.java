@@ -7,13 +7,11 @@ import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Observable;
@@ -42,6 +40,7 @@ public class ServerImplementation extends Observable implements Server
 	private ConcurrentHashMap<String, Account> cookieMap = new ConcurrentHashMap<String, Account>();
 	private ConcurrentHashMap<String, Department> departmentMap = new ConcurrentHashMap<String, Department>();
 	private ConcurrentHashMap<String, PlanFile> planTemplateMap = new ConcurrentHashMap<String, PlanFile>();
+	
 	/**
 	 * Initializes server with default objects listed above for testing
 	 * 
@@ -201,7 +200,6 @@ public class ServerImplementation extends Observable implements Server
 		System.out.println("this.notifyObservers");
 		setChanged();
 		notifyObservers(cookie);
-
 	}
 
 	/*
@@ -621,16 +619,29 @@ public class ServerImplementation extends Observable implements Server
 		}
 	}
 	
-	public void addObserver(final Remote r)
+	public void addObserver(final RemoteClient r)
 	{
-		super.addObserver(new Observer()
+		Observer o=new Observer()
         {
             @Override
             public void update(Observable o,Object arg)
             {
-                ((Client) r).update("yo");
+                try {
+					r.update(r.getCookie());
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
             }
-        });
+        };
+		super.addObserver(o);
+		
+	}
+
+	@Override
+	public void addObserver(Remote aRemoteObj) throws RemoteException {
+		System.out.println("it happened");
+		addObserver((RemoteClient)aRemoteObj);
+		System.out.println("nvm we're good");
 	}
 
 }
