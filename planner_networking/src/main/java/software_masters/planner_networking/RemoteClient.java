@@ -11,8 +11,4 @@ public interface RemoteClient extends Remote {
 	
 	String getCookie() throws RemoteException;
 
-	void setObserverID(int id) throws RemoteException;
-	
-	int getObserverID() throws RemoteException;
-
 }
