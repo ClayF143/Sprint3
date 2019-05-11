@@ -1,11 +1,9 @@
 package software_masters.planner_networking;
 
 import java.io.IOException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +19,7 @@ public class Driver extends Application implements ViewTransitionalModel
 {
 
 	private Registry registry;
-	private Client client;
+	private RemoteClient client;
 	private LoginController controller;
 	private MainController mainController;
 	private ComparisonController comparisonController;
@@ -53,9 +51,7 @@ public class Driver extends Application implements ViewTransitionalModel
 			registry = LocateRegistry.getRegistry(1060);
 			Server stub = (Server) registry.lookup("PlannerServer");
 			client = new Client(stub);
-			//Remote aRemoteObj = (Remote) client;
-            //stub.addObserver(aRemoteObj);
-			stub.addObserver(client);
+            stub.addObserver(client);
             System.out.println("added Observer");
             
 
@@ -109,7 +105,7 @@ public class Driver extends Application implements ViewTransitionalModel
 		Scene scene = new Scene(root);
 
 		controller = loader.getController();
-		controller.setClient(client);
+		controller.setClient((Client)client);
 		controller.setViewTransitionalModel(this);
 		stage.setScene(scene);
 
@@ -123,7 +119,7 @@ public class Driver extends Application implements ViewTransitionalModel
 		Scene scene2 = new Scene(root2);
 
 		mainController = loader2.getController();
-		mainController.setClient(client);
+		mainController.setClient((Client)client);
 		mainController.setViewTransitionalModel(this);
 		mainController.getPlans(mainController.yearDropdown);
 		stage.setScene(scene2);
@@ -144,7 +140,7 @@ public class Driver extends Application implements ViewTransitionalModel
 		Scene scene3 = new Scene(root3);
 		
 		comparisonController = loader3.getController();
-		comparisonController.setClient(client);
+		comparisonController.setClient((Client)client);
 		comparisonController.setViewTransitionalModel(this);
 		comparisonController.setYear1(mainController.yearDropdown.getValue().getYear());
 		comparisonController.planChange1();
