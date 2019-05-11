@@ -1,18 +1,15 @@
 package software_masters.planner_networking;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * @author lee kendall and wesley murray
  */
 
-public class Client extends UnicastRemoteObject
+public class Client extends UnicastRemoteObject implements RemoteClient
 {
 
 	/**
@@ -28,6 +25,7 @@ public class Client extends UnicastRemoteObject
 	private Node currNode2;
 	private Server server;
 	private String username;
+	private int observerID;
 	
 	private static final long serialVersionUID = 1L;
 
@@ -41,6 +39,14 @@ public class Client extends UnicastRemoteObject
 		this.server = server;
 	}
 	
+	public int getObserverID() throws RemoteException{
+		return observerID;
+	}
+
+	public void setObserverID(int observerID) throws RemoteException{
+		this.observerID = observerID;
+	}
+
 	public String getUsername()
 	{
 		return username;
@@ -308,8 +314,11 @@ public class Client extends UnicastRemoteObject
 
 	public void update(String a)
 	{
-		SaveNotification.show();
-		
+		if(!a.equals(cookie))
+		{
+			System.out.println(a+" "+cookie);
+			SaveNotification.show();
+		}
 	}
 
 }
