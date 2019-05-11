@@ -4,8 +4,6 @@ import java.io.FileNotFoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
