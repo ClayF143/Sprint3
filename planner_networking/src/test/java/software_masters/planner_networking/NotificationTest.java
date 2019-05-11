@@ -11,8 +11,8 @@ import org.junit.*;
 import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 public class NotificationTest extends ApplicationTest {
@@ -40,19 +40,53 @@ public class NotificationTest extends ApplicationTest {
 	@Test
 	public void notificationTest() throws IllegalArgumentException, RemoteException, NotBoundException, InterruptedException
 	{
+		//login
 		scene = stage.getScene();
 		clickOn("#userText");
 		write("user");
 		clickOn("#passText");
 		write("user");
 		clickOn("#loginButton");
+		
+		//editing something and saving shouldn't bring the popup on your screen
 		scene=stage.getScene();
-		System.out.println("logged in fine apparently");
+		clickOn("#yearDropdown");
+		type(KeyCode.DOWN);
+		type(KeyCode.ENTER);
+		clickOn("#yearSelectButton");
+		clickOn("#editButton");
+		clickOn("#tree");
+		type(KeyCode.DOWN);
+		clickOn("#contentField");
+		clickOn("#contentField");
+		clickOn("#contentField");
+		write("ducks");
+		clickOn("#saveButton");
+		clickOn("#logout");
+		scene = stage.getScene();
+		clickOn("#no");
+		scene=stage.getScene();
+		TextField t=(TextField)scene.lookup("#userText");
+		assert(t!=null);
+		
+		//login
+		clickOn("#userText");
+		write("user");
+		clickOn("#passText");
+		write("user");
+		clickOn("#loginButton");
+		scene = stage.getScene();
+		
+		//someone else changing things should bring a popup on the screen
 		changeSomething();
-		System.out.println("changed something");
-		scene=stage.getScene();
-		Button ok=(Button) scene.lookup("#ok");
-		assertTrue(ok.getText().equals("ok"));
+		clickOn("#logout");
+		try
+		{
+			clickOn("#no");
+		}
+		catch(Exception e){}
+		t=(TextField)scene.lookup("#userText");
+		assertTrue(t==null);
 	}
 	
 	private void changeSomething() throws IllegalArgumentException, RemoteException, NotBoundException
@@ -65,7 +99,6 @@ public class NotificationTest extends ApplicationTest {
 		client.setCurrNode(client.getCurrNode1().getChildren().get(0));
 		client.addBranch();
 		client.pushPlan(client.getCurrPlanFile());
-		
 	}
 
 }
