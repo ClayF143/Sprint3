@@ -25,7 +25,6 @@ public class Client extends UnicastRemoteObject implements RemoteClient
 	private Node currNode2;
 	private Server server;
 	private String username;
-	private int observerID;
 	
 	private static final long serialVersionUID = 1L;
 
@@ -37,14 +36,6 @@ public class Client extends UnicastRemoteObject implements RemoteClient
 	public Client(Server server) throws RemoteException
 	{
 		this.server = server;
-	}
-	
-	public int getObserverID() throws RemoteException{
-		return observerID;
-	}
-
-	public void setObserverID(int observerID) throws RemoteException{
-		this.observerID = observerID;
 	}
 
 	public String getUsername()
